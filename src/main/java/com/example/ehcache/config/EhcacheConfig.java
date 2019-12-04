@@ -3,12 +3,15 @@ package com.example.ehcache.config;
 import java.time.Duration;
 
 import org.ehcache.CacheManager;
+import org.ehcache.config.EvictionAdvisor;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.example.ehcache.common.CacheEnum;
 
 
 /**
@@ -57,14 +60,14 @@ public class EhcacheConfig {
        //返回一个CacheManagerBuilder实例
        CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
                //缓存名称
-               .withCache("ehcache",
+               .withCache(CacheEnum.EHEACHE.name(),
                        //缓存配置
                        CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Object.class, ResourcePoolsBuilder.heap(1000000L))
                                //持续时间
                                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(30)))
                                //调用build()返回一个完全实例化但未初始化的CacheManager,多个cache时，build()方法调用一次和多次都行
                                 .build())
-               .withCache("test",
+               .withCache(CacheEnum.TEST.name(),
                        //缓存配置
                        CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Object.class, ResourcePoolsBuilder.heap(1000000L))
                                //持续时间

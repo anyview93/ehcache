@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.example.ehcache.common.CacheEnum;
+
 /**
  * @author shizhiguo
  * @version 1.0.
@@ -31,8 +33,8 @@ public class CacheServiceTest {
 
     @Test
     public void testCacheManager(){
-        Cache<String, Object> chcache = cacheManager.getCache("ehcache", String.class, Object.class);
-        Cache<String, Object> test = cacheManager.getCache("test", String.class, Object.class);
+        Cache<String, Object> chcache = cacheManager.getCache(CacheEnum.EHEACHE.name(), String.class, Object.class);
+        Cache<String, Object> test = cacheManager.getCache(CacheEnum.TEST.name(), String.class, Object.class);
         test.put("test","12344");
         Object test1 = test.get("test");
         chcache.put("cache","9797978979");
