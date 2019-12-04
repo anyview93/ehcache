@@ -1,11 +1,15 @@
 package com.example.ehcache.config;
 
+import java.time.Duration;
+
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 
 /**
  * @author shizhiguo
@@ -16,7 +20,11 @@ import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 @Configuration
 public class EhcacheConfig {
 
-    @Bean
+    /**
+     * ehcache v2.10.x
+     * @return
+     */
+   /* @Bean
     public CacheManager getCacheManager(){
         CacheConfiguration config = new CacheConfiguration();
         //缓存名称
@@ -38,5 +46,34 @@ public class EhcacheConfig {
         CacheManager cacheManager = CacheManager.newInstance(configuration);
         //将CacheManager注册为bean，供缓存工具类使用
         return cacheManager;
-    }
+    }*/
+
+    /**
+     *  chchache v3.8.1
+     * @return
+     */
+   @Bean
+   public CacheManager getCacheManager(){
+       //返回一个CacheManagerBuilder实例
+       CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+               //缓存名称
+               .withCache("ehcache",
+                       //缓存配置
+                       CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Object.class, ResourcePoolsBuilder.heap(1000000L))
+                               //持续时间
+                               .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(30)))
+                               //调用build()返回一个完全实例化但未初始化的CacheManager,多个cache时，build()方法调用一次和多次都行
+                                .build())
+               .withCache("test",
+                       //缓存配置
+                       CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Object.class, ResourcePoolsBuilder.heap(1000000L))
+                               //持续时间
+                               .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(30)))
+                               //调用build()返回一个完全实例化但未初始化的CacheManager,多个cache时，build()方法调用一次和多次都行
+                               .build())
+               //初始化CacheManager
+               .build(true);
+
+       return cacheManager;
+   }
 }
