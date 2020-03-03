@@ -1,1 +1,11 @@
+spring:
+  datasource:
+    name: dataSource
+    url: jdbc:postgresql://47.96.105.155:5432/ehcache?Charset=utf8
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 6789@jkl
+    type: com.alibaba.druid.pool.DruidDataSource
 
+server:
+  port: 8080
